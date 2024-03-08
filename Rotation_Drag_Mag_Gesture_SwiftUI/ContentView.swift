@@ -8,14 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var degree = 0.0
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Image(systemName: "star.fill")
+                .font(.system(size: 200))
+                .foregroundColor(.green)
+                .rotationEffect(Angle.degrees(degree))
+                .gesture(
+                    RotationGesture()
+                        .onChanged({ angle in
+                            self.degree = angle.degrees
+                        })
+            )
         }
-        .padding()
     }
 }
 
