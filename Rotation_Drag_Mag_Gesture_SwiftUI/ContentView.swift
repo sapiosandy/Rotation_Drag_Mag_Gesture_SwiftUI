@@ -12,9 +12,12 @@ struct ContentView: View {
 //    @State private var degree = 0.0
     
     // Magnification Gesture:
-    @State private var tempValue: CGFloat = 0
-    @State private var finalValue: CGFloat = 1
+//    @State private var tempValue: CGFloat = 0
+//    @State private var finalValue: CGFloat = 1
     
+    //Drag Gesture
+    @GestureState private var dragOffset = CGSize.zero
+    @State private var position = CGSize.zero
     var body: some View {
         VStack {
             Image(systemName: "star.fill")
@@ -29,17 +32,30 @@ struct ContentView: View {
 //                        })
 //            )
             // Magnification Gesture
-                .scaleEffect(finalValue + tempValue)
+//                .scaleEffect(finalValue + tempValue)
+//                .gesture(
+//                    MagnificationGesture()
+//                        .onChanged { amount in
+//                            self.tempValue = amount - 1
+//                        }
+//                        .onEnded { amount in
+//                            self.finalValue += self.tempValue
+//                            self.tempValue = 0
+//                        }
+//                )
+            // Drag Gesture
+                .offset(x: position.width + dragOffset.width, y: position.height + dragOffset.height)
                 .gesture(
-                    MagnificationGesture()
-                        .onChanged { amount in
-                            self.tempValue = amount - 1
-                        }
-                        .onEnded { amount in
-                            self.finalValue += self.tempValue
-                            self.tempValue = 0
-                        }
+                    DragGesture()
+                        .updating($dragOffset, body: { (value, state, transaction) in
+                            state = value.translation
+                        })
+                        .onEnded({ (value) in
+                            position.height += value.translation.height
+                            position.width += value.translation.width
+                        })
                 )
+            
         }
     }
 }
